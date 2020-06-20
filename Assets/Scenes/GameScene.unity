@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 51107835}
   - component: {fileID: 51107834}
   m_Layer: 0
-  m_Name: InputManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,11 +147,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 51107833}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d86b4ce498ddd534cbb81915bc8327f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 7543637eaf696c14cbfbcc1df9424bf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstSelectedGem: {fileID: 0}
-  secondSelectedGem: {fileID: 0}
 --- !u!4 &51107835
 Transform:
   m_ObjectHideFlags: 0
@@ -195,14 +193,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a5a4c1372f117949a319b79e308f599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gems:
-  - {fileID: 819904425814637938, guid: 8344efba82faca14f923a66c6f46fae1, type: 3}
-  - {fileID: 236746343384264838, guid: 071095937aab95642b3b195780b6295d, type: 3}
-  - {fileID: 6614784308894954196, guid: 5eb3a9a5606ed4647b705fbab08cdc91, type: 3}
-  - {fileID: 6257616915955885679, guid: 252fb442e293bef438409cb4b648221a, type: 3}
-  - {fileID: 6197319932991041863, guid: 69d8b973cab80a440b8ef0981a626816, type: 3}
-  - {fileID: 2290428516703239737, guid: db0a1b2ba32b8df4591d9ec0973f31e5, type: 3}
-  - {fileID: 7225978020542929253, guid: 409579e630c514549815a54dc6ff75de, type: 3}
+  baseGem: {fileID: 753437889010131627, guid: 2f1b0eb1ba31fcc4fb90ec76c1bed3b9, type: 3}
+  gemSprites:
+  - {fileID: 21300000, guid: b5ce024293a2c094283f90b393e43ade, type: 3}
+  - {fileID: 21300000, guid: c8289f2f42a29854cb567ac90cc657ea, type: 3}
+  - {fileID: 21300000, guid: 9000694dc5242584fb9f2004386dc6fb, type: 3}
+  - {fileID: 21300000, guid: 11aa1c072fe5daa49ab5f01dc2bb2921, type: 3}
+  - {fileID: 21300000, guid: 8d727fb20c158da4884398ad44a56f08, type: 3}
+  - {fileID: 21300000, guid: 143afcbb40e0f4a4a9af66b6fabed501, type: 3}
+  - {fileID: 21300000, guid: f636f3448afcae3458eeabee8c3167f1, type: 3}
 --- !u!4 &387577319
 Transform:
   m_ObjectHideFlags: 0

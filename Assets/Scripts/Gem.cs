@@ -1,51 +1,59 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class Gem : MonoBehaviour
 {
+    [SerializeField] private SpriteRenderer spriteRenderer;
     public GameObject prefab;
     public Vector2 gridPosition;
     public int id;
 
-    public void Init(int id, Vector2 gridPosition)
+    public bool Init(Vector2 gridPosition, Sprite sprite, int id)
     {
-        this.id = id;
         this.gridPosition = gridPosition;
+        spriteRenderer.sprite = sprite;
+        this.id = id;
+        return CheckForMatches(Vector2.left, gridPosition).Count <= 2 && CheckForMatches(Vector2.down, gridPosition).Count <= 2;
     }
 
+    public void CheckMove(Gem newGem)
+    {
+        MoveGem(newGem);
+    }
+    
     private void MoveGem(Gem newGem)
     {
-        var tempPosition = transform.position;
-        transform.position = newGem.transform.position;
-        newGem.transform.position = tempPosition;
-        var tempGem = gridPosition;
-        gridPosition = newGem.gridPosition;
-        newGem.gridPosition = tempGem;
+        var tempId = id;
+        id = newGem.id;
+        newGem.id = tempId;
+        var tempSprite = spriteRenderer.sprite;
+        spriteRenderer.sprite = newGem.spriteRenderer.sprite;
+        newGem.spriteRenderer.sprite = tempSprite;
+    }
+
+    public List<Gem> CheckForMatches(Vector2 direction, Vector2 originPosition)
+    {
+        var directionsToCheck = new[] {direction, -direction};
+        var checkPosition = originPosition;
+        var foundMatches = new List<Gem> {this};
+        var gridObjects = GameManager.Instance.gridObjects;
+        for (var i = 0; i <= 1; i++)
+        {
+            while (gridObjects.ContainsKey(checkPosition + directionsToCheck[i]) &&
+                   id == gridObjects[checkPosition + directionsToCheck[i]].GetComponent<Gem>().id)
+            {
+                var gem = gridObjects[checkPosition + directionsToCheck[i]].GetComponent<Gem>();
+                foundMatches.Add(gem);
+                checkPosition = gem.gridPosition;
+            }
+
+            checkPosition = originPosition;
+        }
+        return foundMatches;
     }
 
     private void OnMouseDown()
     {
-        if (InputManager.Instance.firstSelectedGem == null)
-        {
-            InputManager.Instance.firstSelectedGem = this;
-        }
-
-        else if (InputManager.Instance.secondSelectedGem == null &&
-                 Math.Abs(Vector2.Distance(gridPosition, InputManager.Instance.firstSelectedGem.gridPosition) - 1) < 0.05f)
-        {
-            {
-                InputManager.Instance.secondSelectedGem = this;
-                MoveGem(InputManager.Instance.firstSelectedGem);
-                InputManager.Instance.ClearSelection();
-            }
-        }
-
-        else
-        {
-            InputManager.Instance.ClearSelection();
-        }
+        GameManager.Instance.SelectGems(this);
     }
 }
