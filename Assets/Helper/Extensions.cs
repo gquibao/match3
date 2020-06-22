@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace Helper
 {
@@ -10,6 +11,14 @@ namespace Helper
             var currentScale = Screen.width / (Screen.height * 1f);
             if (currentScale <= 2)
                 cam.orthographicSize *= baseScale / currentScale;
+        }
+
+        public static void ClearGemContainer(this GameObject go)
+        {
+            go.GetComponentsInChildren<Gem>().ToList().ForEach(gem =>
+            {
+                GameObject.Destroy(gem.gameObject);
+            });
         }
     }
 }

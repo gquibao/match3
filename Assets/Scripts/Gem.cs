@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Gem : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] public SpriteRenderer spriteRenderer;
     public GameObject prefab;
     public Vector2 gridPosition;
     public int id;
@@ -30,6 +30,15 @@ public class Gem : MonoBehaviour
         spriteRenderer.sprite = newGem.spriteRenderer.sprite;
         newGem.spriteRenderer.sprite = tempSprite;
     }
+    
+    public void MoveGem(Vector2 newPosition, float offset)
+    {
+        var gridObjects = GameManager.Instance.gridObjects;
+        gridObjects.Remove(gridPosition);
+        gridPosition = newPosition;
+        transform.position = gridPosition * offset;
+        gridObjects.Add(gridPosition, gameObject);
+    }
 
     public List<Gem> CheckForMatches(Vector2 direction, Vector2 originPosition)
     {
@@ -46,7 +55,6 @@ public class Gem : MonoBehaviour
                 foundMatches.Add(gem);
                 checkPosition = gem.gridPosition;
             }
-
             checkPosition = originPosition;
         }
         return foundMatches;
