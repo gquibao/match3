@@ -60,6 +60,20 @@ public class Gem : MonoBehaviour
         return foundMatches;
     }
 
+    public bool CheckPossibleMatches()
+    {
+        var gridObjects = GameManager.Instance.gridObjects;
+        var position = new Vector2(gridPosition.x + 1, gridPosition.y);
+        if(gridObjects.ContainsKey(position) && CheckForMatches(Vector2.right, position).Count > 0) return true;
+        position = new Vector2(gridPosition.x - 1, gridPosition.y);
+        if(gridObjects.ContainsKey(position) && CheckForMatches(Vector2.left, position).Count > 0) return true;
+        position = new Vector2(gridPosition.x, gridPosition.y + 1);
+        if(gridObjects.ContainsKey(position) && CheckForMatches(Vector2.up, position).Count > 0) return true;
+        position = new Vector2(gridPosition.x, gridPosition.y + 1);
+        if(gridObjects.ContainsKey(position) && CheckForMatches(Vector2.down, position).Count > 0) return true;
+        return false;
+    }
+
     private void OnMouseDown()
     {
         GameManager.Instance.SelectGems(this);

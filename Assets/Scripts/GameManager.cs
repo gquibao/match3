@@ -2,17 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    private const int LevelTime = 120;
     public Dictionary<Vector2, GameObject> gridObjects = new Dictionary<Vector2, GameObject>();
     private Gem _firstSelectedGem;
     private Gem _secondSelectedGem;
-    public int score;
+    private int _score;
+    [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text targetScoreText;
+    [SerializeField] private TMP_Text timerText;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip audioSelected, audioSwap, audioClear;
     public Action<Vector2> onMatchScored;
-    public AudioSource audioSource;
-    public AudioClip audioSelected, audioSwap, audioClear;
+
+    private void Start()
+    {
+        scoreText.text = "0";
+        StartCoroutine(Timer(10));
+    }
 
     public void SelectGems(Gem selectedGem)
     {
@@ -58,7 +69,8 @@ public class GameManager : Singleton<GameManager>
     {
         var matchCount = foundMatches.Count;
         if (matchCount < 3) return;
-        score += 10 * matchCount;
+        _score += 10 * matchCount;
+        scoreText.text = _score.ToString();
         prepareAndPlayAudio(audioClear);
         foundMatches.ForEach(gem =>
         {
@@ -76,5 +88,22 @@ public class GameManager : Singleton<GameManager>
         _firstSelectedGem.spriteRenderer.color = Color.white;
         _firstSelectedGem = null;
         _secondSelectedGem = null;
+    }
+
+    private IEnumerator Timer(int levelGoal)
+    {
+        var time = LevelTime;
+        targetScoreText.text = levelGoal.ToString();
+        while (time > 0)
+        {
+            time--;
+            timerText.text = TimeSpan.FromSeconds(time).ToString(@"mm\:ss");
+            yield return new WaitForSeconds(1);
+        }
+
+        if (_score >= levelGoal)
+        {
+            StartCoroutine(Timer(levelGoal + 100));
+        }
     }
 }

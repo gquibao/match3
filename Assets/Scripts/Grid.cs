@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Helper;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -28,7 +29,12 @@ public class Grid : MonoBehaviour
                 AddGemToGrid(new Vector2(i, j));
             }
         }
-
+        
+        if (!ValidateBoard())
+        {
+            gameObject.ClearGemContainer();
+            CreateGrid();
+        }
         Camera.main.SetCamera();
     }
 
@@ -72,7 +78,30 @@ public class Grid : MonoBehaviour
                 var gem = go.GetComponent<Gem>();
                 GameManager.Instance.CheckMatches(gem);
             });
+            Debug.Log(ValidateBoard());
+            if (!ValidateBoard())
+            {
+                gameObject.ClearGemContainer();
+                CreateGrid();
+            }
         }
+    }
+
+    private bool ValidateBoard()
+    {
+        for (var i = 0; i < GridDimensions.x; i++)
+        {
+            for (var j = 0; j < GridDimensions.y; j++)
+            {
+                var gridPosition = new Vector2(i, j);
+                var gridObjects = GameManager.Instance.gridObjects;
+                if (!gridObjects.ContainsKey(gridPosition)) continue;
+                var gem = gridObjects[gridPosition].GetComponent<Gem>();
+                if (gem.CheckPossibleMatches()) return true;
+            }
+        }
+
+        return false;
     }
 
     private void AddGemToGrid(Vector2 gridPosition)
