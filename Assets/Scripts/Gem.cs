@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Gem : MonoBehaviour
@@ -30,7 +31,7 @@ public class Gem : MonoBehaviour
         spriteRenderer.sprite = newGem.spriteRenderer.sprite;
         newGem.spriteRenderer.sprite = tempSprite;
     }
-    
+
     public void MoveGem(Vector2 newPosition, float offset)
     {
         var gridObjects = GameManager.Instance.gridObjects;

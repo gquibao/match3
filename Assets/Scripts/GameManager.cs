@@ -22,7 +22,7 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         scoreText.text = "0";
-        StartCoroutine(Timer(10));
+        StartCoroutine(Timer(100));
     }
 
     public void SelectGems(Gem selectedGem)
@@ -30,7 +30,7 @@ public class GameManager : Singleton<GameManager>
         if (_firstSelectedGem == null)
         {
             _firstSelectedGem = selectedGem;
-            prepareAndPlayAudio(audioSelected);
+            PrepareAndPlayAudio(audioSelected);
             _firstSelectedGem.spriteRenderer.color = new Color(1, 1, 1, 0.8f);
         }
 
@@ -39,7 +39,7 @@ public class GameManager : Singleton<GameManager>
         {
             {
                 _secondSelectedGem = selectedGem;
-                prepareAndPlayAudio(audioSwap);
+                PrepareAndPlayAudio(audioSwap);
                 _firstSelectedGem.CheckMove(_secondSelectedGem);
                 CheckMatches(_firstSelectedGem);
                 CheckMatches(_secondSelectedGem);
@@ -53,7 +53,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private void prepareAndPlayAudio(AudioClip clip)
+    private void PrepareAndPlayAudio(AudioClip clip)
     {
         audioSource.clip = clip;
         audioSource.Play();
@@ -71,7 +71,7 @@ public class GameManager : Singleton<GameManager>
         if (matchCount < 3) return;
         _score += 10 * matchCount;
         scoreText.text = _score.ToString();
-        prepareAndPlayAudio(audioClear);
+        PrepareAndPlayAudio(audioClear);
         foundMatches.ForEach(gem =>
         {
             if (gridObjects.ContainsValue(gem.gameObject))
@@ -103,7 +103,7 @@ public class GameManager : Singleton<GameManager>
 
         if (_score >= levelGoal)
         {
-            StartCoroutine(Timer(levelGoal + 100));
+            StartCoroutine(Timer(levelGoal + 200));
         }
     }
 }
