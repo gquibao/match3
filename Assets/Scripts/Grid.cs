@@ -20,7 +20,7 @@ public class Grid : MonoBehaviour
         CreateGrid();
     }
 
-    private void CreateGrid()
+    public void CreateGrid()
     {
         for (var i = 0; i < GridDimensions.x; i++)
         {

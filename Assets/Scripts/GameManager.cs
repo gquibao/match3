@@ -2,8 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Helper;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -12,6 +15,8 @@ public class GameManager : Singleton<GameManager>
     private Gem _firstSelectedGem;
     private Gem _secondSelectedGem;
     private int _score;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private Button restartButton;
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text targetScoreText;
     [SerializeField] private TMP_Text timerText;
@@ -21,6 +26,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
+        restartButton.onClick.AddListener(RestartGame);
         scoreText.text = "0";
         StartCoroutine(Timer(100));
     }
@@ -90,6 +96,18 @@ public class GameManager : Singleton<GameManager>
         _secondSelectedGem = null;
     }
 
+    private void RestartGame()
+    {
+        var grid = FindObjectOfType<Grid>();
+        grid.gameObject.ClearGemContainer();
+        gameOverPanel.SetActive(false);
+        gridObjects.Clear();
+        _score = 0;
+        scoreText.text = "0";
+        grid.CreateGrid();
+        StartCoroutine(Timer(100));
+    }
+    
     private IEnumerator Timer(int levelGoal)
     {
         var time = LevelTime;
@@ -104,6 +122,11 @@ public class GameManager : Singleton<GameManager>
         if (_score >= levelGoal)
         {
             StartCoroutine(Timer(levelGoal + 200));
+        }
+
+        else
+        {
+            gameOverPanel.SetActive(true);
         }
     }
 }
